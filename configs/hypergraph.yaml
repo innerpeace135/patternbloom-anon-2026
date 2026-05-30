@@ -1,0 +1,24 @@
+corpus:
+  source: flashrag
+  splits:
+    - HotpotQA
+    - 2WikiMultiHopQA
+  chunk_size: 256
+  chunk_overlap: 32
+
+extractor:
+  endpoint: http://localhost:9000/v1
+  model_name: Qwen/Qwen2.5-7B-Instruct
+  api_key: dummy
+  temperature: 0.0
+  max_concurrent: 16
+
+encoder:
+  model_name: BAAI/bge-large-en-v1.5
+  batch_size: 32
+  device: cuda:0
+  normalize: true
+
+index:
+  output_dir: data/hypergraph
+  metric: cosine

@@ -1,0 +1,29 @@
+eval:
+  test_path: data/processed/hotpotqa_test.parquet
+  checkpoint_dir: checkpoints/stage2/best
+  output_dir: outputs/eval
+  num_samples: 1000
+  seed: 40
+
+retrieval:
+  endpoint: http://localhost:8000
+  top_k: 5
+
+gpm:
+  memory_path: data/gpm/memory.json
+  encoder_name: BAAI/bge-large-en-v1.5
+  top_k: 3
+
+inference:
+  tensor_model_parallel_size: 2
+  gpu_memory_utilization: 0.6
+  temperature: 0.0
+  max_response_len: 4096
+  max_turns: 6
+  batch_size: 32
+
+metrics:
+  - exact_match
+  - token_f1
+  - contain_accuracy
+  - avg_turns

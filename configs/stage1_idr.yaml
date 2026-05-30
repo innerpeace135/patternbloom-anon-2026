@@ -1,0 +1,41 @@
+stage: 1
+seed: 42
+
+data:
+  train_path: data/processed/train.parquet
+  val_path: data/processed/hotpotqa_test.parquet
+  prompt_template: patternbloom/agent/prompts.py:STAGE1_PROMPT
+
+policy:
+  model_name_or_path: Qwen/Qwen2.5-7B-Instruct
+  tensor_model_parallel_size: 2
+  rollout_n: 8
+  max_prompt_len: 1024
+  max_response_len: 4096
+  max_turns: 6
+
+oracle:
+  endpoint: http://localhost:8100
+  model_name_or_path: Qwen/Qwen2.5-1.5B-Instruct
+  strict: true
+
+retrieval:
+  endpoint: http://localhost:8000
+  top_k: 5
+
+idr:
+  temperature: 1.0
+  format_gate: true
+
+train:
+  total_epochs: 1
+  global_batch_size: 128
+  ppo_mini_batch_size: 32
+  ppo_micro_batch_size_per_gpu: 1
+  learning_rate: 1.0e-6
+  kl_coef: 0.005
+  clip_ratio: 0.2
+  gpu_memory_utilization: 0.4
+  checkpoint_interval: 10
+  best_metric: val_em
+  checkpoint_dir: checkpoints/stage1
